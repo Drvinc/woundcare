@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<!--
+  * Please see the included README.md file for license terms and conditions.
+  -->
+<head>
+    <title>Blank Standard HTML5 Web App Template Wound chart</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+
+    <script>
+        //--------------------
+        // GET USER MEDIA CODE
+        //--------------------
+        navigator.getUserMedia = ( navigator.getUserMedia ||
+                               navigator.webkitGetUserMedia ||
+                               navigator.mozGetUserMedia ||
+                               navigator.msGetUserMedia);
+
+        var video;
+        var webcamStream;
+      
+        function startWebcam() {
+            if (navigator.getUserMedia) {
+        navigator.getUserMedia (
+
+      // constraints
+      {
+         video: true,
+         audio: false
+      },
+
+      // successCallback
+      function(localMediaStream) {
+          video = document.querySelector('video');
+         video.src = window.URL.createObjectURL(localMediaStream);
+          webcamStream = localMediaStream.getTracks()[0];
+      },
+
+      // errorCallback
+      function(err) {
+         console.log("The following error occured: " + err);
+                    }
+            );
+        }   else  {
+            console.log("getUserMedia not supported");
+                    }  
+        }
+      
+        function stopWebcam() {
+            webcamStream.stop();
+            }
+        //---------------------
+        // TAKE A SNAPSHOT CODE
+        //---------------------
+        var canvas, ctx;
+
+        function init() {
+            // Get the canvas and obtain a context for
+            // drawing in it
+            canvas = document.getElementById("myCanvas");
+            ctx = canvas.getContext('2d');
+            }
+
+        function snapshot() {
+            // Draws current image from the video element into the canvas
+            ctx.drawImage(video, 0,0, canvas.width, canvas.height);
+            }
+
+    </script>
+    <style>
+        
+        p {
+            border:1px solid black;
+                }       
+        input {
+            border: 3px solid #999;
+            border-radius: 5;            
+            }
+ 
+        input:invalid:after {
+            position: absolute; 
+            content: '✖';
+            padding-left: 110px;
+            }
+
+        input:valid:after {
+            position: absolute;
+            content: '✓';
+            padding-left: 110px;
+            }
+    </style>
+
+    </head>
+
+<body  onload="init();">
+    <header>Wound Assessment Tools</header>
+    <nav>
+      <ul>
+          <li><a href='#PatientInfo'>Patient Info</a></li>
+          <li><a href='#WoundAssessment'>Wound assessment</a></li>
+          <li><a href='#WoundImage'>Wound Image</a></li>
+      </ul>
+    </nav>
+    <p id='PatientInfo'>
+        <form>
+        <fieldset>
+            <legend>Paitent Data</legend>
+            <label for='patientID'>
+            ID: <input type='text'
+                      id='patientID' 
+                      name='pasitent_name'
+                      placeholder='type patient id here !!'
+                      required>
+            </label>
+            <label for='assessmentDate'>
+            Date: <input type='date'
+                         id='assessmentDate'
+                         name='assessment_date'
+                         required>
+            </label><br>
+            <label for='patientAge'>
+                <input type='text'
+            </label>
+            <label for='patientMentalStatus'>
+            </label>
+            <label for='patientSelfSufficiency'>
+            </label>
+            <label for='patientNutrition'>
+            </label>
+            <label for='patientUnderlying'>
+            </label>
+            
+        
+        
+        </fieldset>
+        </form>
+    </p>
+    <p id='WoundAssessment'>
+    <form>
+    <fieldset>
+    <legend>Wound Assessment</legend>
+        <div>
+        <label for='TIME_T'>
+        T  <input type='text' id='TIME_T' name='time_t'> <br>
+        </label>
+        </div>
+        <div>
+        <label for='TIME_I'>
+        I  <input type='text' id='TIME_I' name='time_i'> <br>
+        </label>
+        </div>
+        <div>
+        <label for='TIME_M'>
+        M  <input type='text' id='TIME_M' name='time_m'> <br>
+        </label>
+        </div>
+        <div>
+        <label for='TIME_E'>
+        E  <input type='text' id='TIME_E' name='time_e'> <br>
+        </label>
+        </div>
+    </fieldset>
+    </form>
+    </p>
+    <p id='WoundImage'>
+        <button onclick="startWebcam();">Start WebCam</button>
+        <button onclick="stopWebcam();">Stop WebCam</button> 
+        <button onclick="snapshot();">Take Snapshot</button> 
+        <video onclick="snapshot(this);" width=200 height=200 id="video" controls autoplay></video>
+        <canvas  id="myCanvas" width="200" height="150"></canvas>  
+    </p>
+    
+</body>
+</html>
